@@ -1,0 +1,14 @@
+regle = nb = nb voisins vivants
+	if vivant :
+		if nb = {2,3}
+			vivant
+		else mort
+	else
+		if nb = {3}
+			vivant
+		else
+			mort
+
+minimum: 3 x 3
+maximum: 10000 x 10000
+parametral
