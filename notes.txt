@@ -12,3 +12,8 @@ regle = nb = nb voisins vivants
 minimum: 3 x 3
 maximum: 10000 x 10000
 parametral
+
+GOLENGINE
+
+Variables: width, height, data/matrix
+Methodes: __init__(w, h, probability), resize(), tic(), print(), get_cell(), set_cell
