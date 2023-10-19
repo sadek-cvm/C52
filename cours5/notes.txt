@@ -1,1 +1,15 @@
-p=a[n]
+n = left + right
+a = [0,1,2]
+p = a[n]
+
+perimetre 1:
+perimetre = p.sum()
+
+
+perimetre 2: caluculer la distance entre chaque points
+KNN : orienté object
+
+KlustrApp
+image processing : logic
+
+KNN : storer la metric
