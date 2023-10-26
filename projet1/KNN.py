@@ -7,8 +7,7 @@ class KNN:
 
     def calculate_distances(self, vector):
         # axis = 1: calculer la distance pour chaque un des lignes
-        distances = np.linalg.norm(self.matrix - vector, axis=1)
-        return distances
+        return np.linalg.norm(self.matrix - vector, axis=1)
         # equivalent à : 
         # for ligne in range(matrix.shape[0]):
         #     distance = []
