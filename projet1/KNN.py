@@ -1,15 +1,7 @@
 import numpy as np
 
-# Exemple du contenu de dataset:
-# [
-#   [x1, x2, x3, ..., xn, t], 
-#   [x1, x2, x3, ..., xn, t],
-#   [x1, x2, x3, ..., xn, t],
-#   ...
-#   ...
-# ]
-
 class KNN:
+    
     def __init__(self):
         self.__dataset = None
         self.__k = None
@@ -89,23 +81,37 @@ class KNN:
     
     
 
-##############################
+#############################
+# Contenu de dataset:
+# [
+#   [x1, x2, x3, ..., xn, t],
+#   [x1, x2, x3, ..., xn, t],
+#   [x1, x2, x3, ..., xn, t],
+#   ...
+#   ...
+# ]
+#############################
+
 def exemple():
     
+    # une liste qui contient tous nos tags.
     tags = ["Cercle", "Carré", "Rectangle"]
     
-    dataset = np.array([[2, 1, 2, 0],   #cercle
-                        [4, 5, 6, 1],   #carre
-                        [7, 3, 7, 2],   #triangle
-                        [5, 6, 6, 1],   #carre
-                        [6, 2, 8, 2],   #triangle
-                        [1, 2, 2, 0],   #cercle
-                        [4, 5, 5, 1],   #carre
-                        [7, 3, 8, 2],   #triangle
-                        [2, 1, 1, 0],   #cercle
-                        [3, 1, 2, 0]]   #rectangle
+    # une matrice de type ndarray contenant les coordonnées de chaque data point
+    # suivi par l'index coorespondant à son tag (valeurs doit être de type float)
+    dataset = np.array([[2, 1, 2, 0],
+                        [4, 5, 6, 1],
+                        [7, 3, 7, 2],
+                        [5, 6, 6, 1],
+                        [6, 2, 8, 2],
+                        [1, 2, 2, 0],
+                        [4, 5, 5, 1],
+                        [7, 3, 8, 2],
+                        [2, 1, 1, 0],
+                        [3, 1, 2, 0]]
                     ).astype(float)
     
+    # une liste de type ndarray contenant les coordonnées du sample (valeurs doit être de type float)
     sample = np.array([8, 4, 7]).astype(float)
 
     knn = KNN()
