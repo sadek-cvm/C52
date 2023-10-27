@@ -16,7 +16,7 @@ class KNN:
 
     def __validate_dataset(self, value):
         if value is None: # si c'est encore None
-            raise ValueError("Veuillez fournir un dataset")
+            raise TypeError("Veuillez fournir un dataset")
         elif not isinstance(value, np.ndarray):
             raise TypeError("Dataset doit être de type ndarray")
         elif value.ndim != 2:
@@ -38,7 +38,7 @@ class KNN:
         elif value.ndim != 1:
             raise ValueError("Sample doit être une liste à 1 dimension")
         elif value.shape[0] != (self.__dataset[:, :-1]).shape[1]:
-            raise ValueError("Les coordonnées de sample doivent être de la même dimension que les coordonnées du dataset (sans compter les tags)")
+            raise ValueError("Les dimensions de sample et des coordonnées de dataset (sans compter les tags) doivent être égalaux")
 
     @property
     def dataset(self):
@@ -69,7 +69,7 @@ class KNN:
         distances = self.__calculate_distances(sample)
         sorted_indices = np.argsort(distances) # ex: [2, 4, 5, 3, 1] (indices)
         nearest_indices = sorted_indices[:self.__k] # ex: [2, 4, 5] (indices)
-        nearest_neighbors = self.__dataset[nearest_indices] # ex: [[1, 2, 3, 0], [4, 5, 6, 0], [7, 8, 9, 1]] (coordonnées)
+        nearest_neighbors = self.__dataset[nearest_indices] # ex: [[1, 2, 3, 0], [4, 5, 6, 0], [7, 8, 9, 1]] (coordonnées + tag)
         return nearest_neighbors
     
     def find_sample_tag(self, sample):
@@ -78,10 +78,13 @@ class KNN:
         nearest_neighbors = self.__find_nearest_neighbors(sample)
         nearest_tags = nearest_neighbors[:, -1]
         tags_frequency = np.bincount(nearest_tags)
-        sample_tag = np.argmax(tags_frequency) # quand il y a un arg avant le nom de la methode cela veut dire que l'information est représenté par l'indice
+        sample_tag = np.argmax(tags_frequency) 
+        # quand la méthode commence avec le mot "arg" cela veut dire qu'on prend la position de valeur et non pas la valeur
         return sample_tag
+    
 
-def main():
+##############################
+def test():
     dataset1 = np.array([[2, 1, 2, 1],  #cercle
                         [4, 5, 6, 2],   #carre
                         [7, 3, 7, 3],   #triangle
@@ -93,22 +96,23 @@ def main():
                         [2, 1, 1, 1],   #cercle
                         [7, 1, 5, 4]])  #rectangle
     
-    dataset2 = np.array([[2, 1, 2, 1],   #cercle
+    dataset2 = np.array([[2, 1, 2, 1],  #cercle
                         [4, 5, 6, 2],   #carre
                         [7, 3, 7, 3],   #triangle
                         [5, 6, 6, 2],   #carre
-                        [6, 2, 8, 3]])
+                        [6, 2, 8, 3]])  #triangle
     
     sample = np.array([7, 1, 6])
 
     knn = KNN()
     knn.dataset = dataset1
-    knn.k = 1
+    knn.k = 3
     sample_tag = knn.find_sample_tag(sample)
     print(sample_tag)
 
 if __name__ == "__main__":
-    main()
+    test()
 
-# truc a faire:
+# trucs a faire:
 # une function qui donne le k maximal
+# verifier si le type des values et float
