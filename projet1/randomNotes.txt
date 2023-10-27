@@ -1,0 +1,3 @@
+notes random: 
+pour le centroide
+(somme(des index des x des points pleins), somme(des index des y des points pleins)) / aire
