@@ -10,15 +10,17 @@ import numpy as np
 # ]
 
 class KNN:
-    def __init__(self, k=1):
+    def __init__(self):
         self.__dataset = None
-        self.__k = k
+        self.__k = None
 
     def __validate_dataset(self, value):
-        if value is None:
+        if value is None: # si c'est encore None
             raise ValueError("Veuillez fournir un dataset")
         elif not isinstance(value, np.ndarray):
             raise TypeError("Dataset doit être de type ndarray")
+        elif value.ndim != 2:
+            raise ValueError("Dataset doit être une liste à 2 dimensions")
         elif value.shape[1] < 2: # minimun une coordonnée et le tag
             raise ValueError("Dataset doit avoir au moins deux elements (une coordonnée et le tag)")
         
@@ -33,6 +35,8 @@ class KNN:
     def __validate_sample(self, value):
         if not isinstance(value, np.ndarray):
             raise TypeError("Sample doit être de type ndarray")
+        elif value.ndim != 1:
+            raise ValueError("Sample doit être une liste à 1 dimension")
         elif value.shape[0] != (self.__dataset[:, :-1]).shape[1]:
             raise ValueError("Les coordonnées de sample doivent être de la même dimension que les coordonnées du dataset (sans compter les tags)")
 
@@ -44,7 +48,7 @@ class KNN:
     def dataset(self, value):
         self.__validate_dataset(value)
         self.__dataset = value
-        self.k = 1 # reinisializer le k
+        self.__k = 1 # reinisializer le k
         
     @property
     def k(self):
@@ -98,12 +102,8 @@ def main():
     sample = np.array([7, 1, 6])
 
     knn = KNN()
-    # knn.dataset = dataset1
-    knn.k = 6
-    sample_tag = knn.find_sample_tag(sample)
-    print(sample_tag)
-
-    knn.dataset = dataset2
+    knn.dataset = dataset1
+    knn.k = 1
     sample_tag = knn.find_sample_tag(sample)
     print(sample_tag)
 
@@ -111,6 +111,4 @@ if __name__ == "__main__":
     main()
 
 # truc a faire:
-# verifier que notre sample est de une dimension
-# verifier que notre dataset est de deux dimensions
 # une function qui donne le k maximal
