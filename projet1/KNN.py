@@ -2,9 +2,23 @@ import numpy as np
 
 class KNN:
     
+    __instance = None
+    
+    # Singleton
+    def __new__(cls):
+        if cls.__instance is None:
+            # appeller la methode __new__ de la super class de KNN (Object) pour recevoir une instace
+            cls.__instance = super(KNN, cls).__new__(cls)
+            cls.__instance.__initialized = False
+
+        return cls.__instance
+
     def __init__(self):
-        self.__dataset = None
-        self.__k = None
+        # pour ne pas reinitialiser le constructor si on a déja creaté une instance
+        if not self.__initialized:
+            self.__dataset = None
+            self.__k = None
+            self.__initialized = True
 
     def __validate_dataset(self, value):
         if value is None: # si c'est encore None
@@ -16,7 +30,7 @@ class KNN:
         elif value.dtype != np.float64:
             raise ValueError("Dataset doit contenir des valeurs de type float")
         elif value.shape[1] < 2: # minimun une coordonnée et le tag
-            raise ValueError("Dataset doit avoir au moins deux elements (une coordonnée et le tag)")
+            raise ValueError("Dataset doit contenir une liste d'au moins deux elements (une coordonnée et le tag)")
         
     def __validate_k(self, value):
         self.__validate_dataset(self.__dataset)
@@ -58,7 +72,8 @@ class KNN:
     def __calculate_distances(self, sample):
         coordinates = self.__dataset[:, :-1] # on enlève les tags
         differences = coordinates - sample
-        return np.linalg.norm(differences, axis=1)
+        distances = np.linalg.norm(differences, axis=1)
+        return distances
         # axis = 1: faire le calcul pour chaqu'un des lignes
     
     def __find_nearest_neighbors(self, sample):
@@ -79,54 +94,64 @@ class KNN:
         # quand la méthode commence avec le mot "arg" cela veut dire qu'on prend la position de valeur et non pas la valeur
         return sample_tag
     
-    
-
-#############################
-# Contenu de dataset:
-# [
-#   [x1, x2, x3, ..., xn, t],
-#   [x1, x2, x3, ..., xn, t],
-#   [x1, x2, x3, ..., xn, t],
-#   ...
-#   ...
-# ]
-#############################
-# Contenu de sample:
-# [x1, x2, x3, ..., xn]
-#############################
-
-def exemple():
-    
-    # une liste qui contient tous nos tags.
-    tags = ["Cercle", "Carré", "Rectangle"]
-    
-    # une matrice de type ndarray contenant les coordonnées de chaque data point
-    # suivi par l'index coorespondant à son tag (valeurs doit être de type float)
-    dataset = np.array([[2, 1, 2, 0],
-                        [4, 5, 6, 1],
-                        [7, 3, 7, 2],
-                        [5, 6, 6, 1],
-                        [6, 2, 8, 2],
-                        [1, 2, 2, 0],
-                        [4, 5, 5, 1],
-                        [7, 3, 8, 2],
-                        [2, 1, 1, 0],
-                        [3, 1, 2, 0]]
-                    ).astype(float)
-    
-    # une liste de type ndarray contenant les coordonnées du sample (valeurs doit être de type float)
-    sample = np.array([8, 4, 7]).astype(float)
-
-    knn = KNN()
-    knn.dataset = dataset
-    knn.k = 2
-    tag_index = knn.find_sample_tag(sample) # retourne un int
-    tag = tags[tag_index]
-    print(tag)
+    def get_minimum_k(self): return 1
+    def get_maximum_k(self): return self.__dataset.shape[0]
 
 if __name__ == "__main__":
-    exemple()
 
-# trucs a faire:
-# une function qui donne le k maximal
-# faire un singleton
+    #############################
+    # Contenu de dataset:
+    # [
+    #   [x1, x2, x3, ..., xn, t],
+    #   [x1, x2, x3, ..., xn, t],
+    #   [x1, x2, x3, ..., xn, t],
+    #   ...
+    #   ...
+    # ]
+    #############################
+    # Contenu de sample:
+    # [x1, x2, x3, ..., xn]
+    #############################
+
+    def exemple():
+        
+        # une liste qui contient tous nos tags.
+        tags = ["Cercle", "Carré", "Rectangle"]
+        
+        # une matrice de type ndarray contenant les coordonnées de chaque data point
+        # suivi par l'index coorespondant à son tag (valeurs doit être de type float)
+        dataset1 = np.array([[2, 1, 2, 0],
+                            [4, 5, 6, 1],
+                            [7, 3, 7, 2],
+                            [5, 6, 6, 1],
+                            [6, 2, 8, 2],
+                            [1, 2, 2, 0],
+                            [4, 5, 5, 1],
+                            [7, 3, 8, 2],
+                            [2, 1, 1, 0],
+                            [3, 1, 2, 0]]
+                        ).astype(float)
+        
+        # une liste de type ndarray contenant les coordonnées du sample (valeurs doit être de type float)
+        sample = np.array([8, 4, 7]).astype(float)
+
+        knn = KNN()
+        knn.dataset = dataset1
+        knn.k = 2
+        tag_index = knn.find_sample_tag(sample) # retourne un int
+        tag = tags[tag_index]
+        print(tag) # rectangle
+
+        # si jamais on change le dataset le k est reinitialiser a 1
+        dataset2 = np.array([[2, 1, 2, 0],
+                            [4, 5, 6, 1],
+                            [7, 3, 7, 2],
+                            [5, 6, 6, 1],
+                            [6, 2, 8, 2]]
+                        ).astype(float)
+
+        knn.dataset = dataset2
+        print(knn.k) # 1
+
+    exemple()
+    
