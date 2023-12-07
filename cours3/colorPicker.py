@@ -11,7 +11,7 @@ class MyApp(QMainWindow):
         super().__init__(None)
         
         self.setWindowTitle('GOL Engine')
-       
+
         self.central_layout = QVBoxLayout()
         self.central_label = QLabel()
         self.central_layout.addWidget(central_label)
@@ -24,8 +24,6 @@ class MyApp(QMainWindow):
         painter.drawRect(50, 50, 200, 200)
         painter.end()
         central_label.setPixmap(QPixmap.fromImage(image) )
-   
-    
     
 
 

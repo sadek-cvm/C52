@@ -124,4 +124,3 @@ a[0] = 10
 print(f'{a=} {b=} {hex(id(a))} {hex(id(b))} : same => {id(a) == id(b)}')
 
 b = copy.deepcopy(a)
-b = copy(a)

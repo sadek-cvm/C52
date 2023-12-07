@@ -1,13 +1,15 @@
 data_1 = np.array([1, 2, 3, 4, 5, 6])
-data_2 = np.array([[1, 2, 3], 
-                   [4, 5, 6]], np.uint16)
-data_3 = np.array([
+
+data_2 = np.array([
                    [  [1., 1.5, 2.],
                       [3., 3.5, 4.] ],
                    
                    [  [9., 8.5, 8.],
                       [7., 6.5, 6.] ]  
                   ])
+
+data_3 = np.array([[1, 2, 3], 
+                   [4, 5, 6]]).astype(np.uint16)
 
 - dtype : uint16
 - ndim : 2
@@ -90,9 +92,10 @@ data = np.array([[0, 1, 2, 3, 4, 5],
 
 result = data[3:0:-1, 1:6:2]
 
-[[19 21]
- [13 15]
- [ 7  9]]
+[[19 21 23]
+ [13 15 17]
+ [ 7  9 11]]
+
 
  -------------------------------------------------------------------------- data1
 [[ 0  1  2  3]
@@ -119,10 +122,17 @@ result = data[3:0:-1, 1:6:2]
  [0.04 0.05 0.06 0.07]
  [0.08 0.09 0.1  0.11]]
 --------------------------------------------------------------------- data1 ** 2
-...
+[[  0   1   4   9]
+ [ 16  25  36  49]
+ [ 64  81 100 121]]
+
+--------------------------------------------------------------- data1 > 5
+[[False False False False]
  [False False  True  True]
- [ True  True  True  True]
---------------------------------------------------------------- data1[data1 > 5]
+ [ True  True  True  True]]
+
+ --------------------------------------------------------------- data1[data1 > 5]
+[ 6  7  8  9 10 11]
 
 -------------------------------------------------------------------------- data1
 [[ 0  1  2  3]
@@ -154,8 +164,7 @@ result = data[3:0:-1, 1:6:2]
 [[  0.   1.   5.  14.]
  [ 27.  45.  70. 101.]
  [138. 183. 234. 294.]]
-
- -------------------------------------------------------------------------- data1
+-------------------------------------------------------------------------- data1
 [[ 0  1  2  3]
  [ 4  5  6  7]
  [ 8  9 10 11]]
@@ -180,7 +189,6 @@ result = data[3:0:-1, 1:6:2]
 
 c, r = np.meshgrid(np.arange(image.shape[1]), np.arange(image.shape[0]))
 
-
 values2 = [i**2 for i in range(10) if i % 2 == 0] # comprehension list
 text = 'Hello world'
 print('Text without "l" : ', ''.join([i for i in text if i != 'l']))
@@ -189,3 +197,53 @@ print([i for i in range(10) if i % 2])
 print([i if i % 2 else '!' for i in range(10) ])
 
 b = deepcopy(a)
+
+# Existing matrix
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6]])
+
+# Column to be added
+new_column = np.array([7, 8])
+
+# Adding the new column
+new_matrix = np.column_stack((matrix, new_column))
+
+np.row_stack()
+
+import sys
+from PySide6.QtWidgets import QApplication, QWidget, QLabel
+from PySide6.QtGui import QPainter, QPixmap, QColor
+
+class SquareDrawer(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # Create a QLabel to display the QPixmap
+        self.label = QLabel(self)
+        self.label.setGeometry(50, 50, 150, 150)  # Set label position and size
+
+        # Draw the square and update the label's pixmap
+        self.draw_square()
+
+    def draw_square(self):
+        pixmap = QPixmap(200, 200)  # Create a QPixmap with width and height
+        pixmap.fill(QColor(255, 255, 255))  # Fill the pixmap with a white background
+
+        painter = QPainter(pixmap)
+        painter.setPen(QColor(0, 0, 0))  # Set pen color to black
+        painter.setBrush(QColor(255, 0, 0))  # Set brush color to red
+
+        # Draw a square (100x100) at position (50, 50) on the pixmap
+        painter.drawRect(50, 50, 100, 100)
+
+        # Set the QPixmap to the label
+        self.label.setPixmap(pixmap)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = SquareDrawer()
+    window.setGeometry(100, 100, 300, 250)  # Set window position and size
+    window.setWindowTitle('Square Drawer')
+
+    window.show()
+    sys.exit(app.exec())
